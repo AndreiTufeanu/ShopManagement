@@ -23,5 +23,10 @@ namespace ShopManagement.ViewsForAdmin.Stats
         {
             InitializeComponent();
         }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

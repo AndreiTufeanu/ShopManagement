@@ -24,5 +24,10 @@ namespace ShopManagement
         {
             InitializeComponent();
         }
+
+        private void Quit_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

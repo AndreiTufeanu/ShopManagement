@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace ShopManagement.ViewsForAdmin
+namespace ShopManagement
 {
     /// <summary>
     /// Interaction logic for AdminView.xaml
@@ -22,6 +22,11 @@ namespace ShopManagement.ViewsForAdmin
         public AdminView()
         {
             InitializeComponent();
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

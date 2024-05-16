@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ShopManagement.ViewModels;
+using ShopManagement.ViewsForCashier;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +24,34 @@ namespace ShopManagement
         public LogInView()
         {
             InitializeComponent();
+            (DataContext as UserVM).OnMoveToNextWindow += LogInView_OnMoveToNextWindow;
+        }
+
+        private void LogInView_OnMoveToNextWindow(object sender, bool isAdmin)
+        {
+            if (isAdmin)
+            {
+                AdminView adminView = new AdminView();
+                adminView.ShowDialog();
+            }
+            else
+            {
+                CashierView cashierView = new CashierView();
+                cashierView.ShowDialog();
+            }
+        }
+
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is UserVM viewModel)
+            {
+                viewModel.Password = ((PasswordBox)sender).SecurePassword.Copy();
+            }
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }
