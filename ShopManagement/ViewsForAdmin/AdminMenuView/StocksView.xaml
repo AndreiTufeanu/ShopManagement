@@ -1,0 +1,97 @@
+﻿<Window x:Class="ShopManagement.ViewsForAdmin.AdminMenuView.StocksView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:ShopManagement.ViewModels"
+        xmlns:converters="clr-namespace:ShopManagement.Converters"
+        mc:Ignorable="d"
+        Title="StocksView" Height="510" Width="1000">
+    <Window.DataContext>
+        <viewModels:StockVM/>
+    </Window.DataContext>
+    <Window.Resources>
+        <converters:StockConvert x:Key="StockConvert"/>
+        <converters:StockBarcodeToProductNameConvert x:Key="StockBarcodeToProductNameConvert"/>
+        <converters:StockBarcodeToProducerNameConvert x:Key="StockBarcodeToProducerNameConvert"/>
+        <converters:StockDateFormatConvert x:Key="StockDateFormatConvert"/>
+    </Window.Resources>
+    <StackPanel>
+        <DataGrid Name="stocksGrid"  Margin="0,15,0,0" AutoGenerateColumns="False" Height="250"
+      ScrollViewer.VerticalScrollBarVisibility="Visible" ItemsSource="{Binding StocksList}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Amount" Binding="{Binding amount}" Width="100"/>
+                <DataGridTextColumn Header="Supply date" Binding="{Binding supply_date, Converter={StaticResource StockDateFormatConvert}}" Width="130"/>
+                <DataGridTextColumn Header="Exp date" Binding="{Binding expiration_date, Converter={StaticResource StockDateFormatConvert}}" Width="130"/>
+                <DataGridTextColumn Header="Buy price / unit" Binding="{Binding price_per_unit}" Width="100"/>
+                <DataGridTextColumn Header="Sell price / unit" Binding="{Binding selling_price_per_unit}" Width="100"/>
+                <DataGridTextColumn Header="Product" Binding="{Binding barcode_id, Converter={StaticResource StockBarcodeToProductNameConvert}}" Width="100"/>
+                <DataGridTextColumn Header="Producer" Binding="{Binding barcode_id, Converter={StaticResource StockBarcodeToProducerNameConvert}}" Width="100"/>
+                <DataGridTextColumn Header="Offer" Binding="{Binding offer_id}" Width="100"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- First Column -->
+            <WrapPanel Margin="0,10,0,0" Grid.Column="0">
+                <Label Width="150" FontSize="15">Amount:</Label>
+                <TextBox Name="txtAmount" Width="200" HorizontalAlignment="Left" />
+            </WrapPanel>
+
+            <WrapPanel Margin="0,50,0,0" Grid.Column="0">
+                <Label Width="150" FontSize="15">Supply date:</Label>
+                <TextBox Name="txtSupplyDate" Width="200" HorizontalAlignment="Left" />
+            </WrapPanel>
+
+            <WrapPanel Margin="0,90,0,0" Grid.Column="0">
+                <Label Width="150" FontSize="15">Expiration date:</Label>
+                <TextBox Name="txtExpDate" Width="200" HorizontalAlignment="Left" />
+            </WrapPanel>
+
+            <!-- Second Column -->
+            <WrapPanel Margin="0,10,0,0" Grid.Column="1">
+                <Label Width="150" FontSize="15">Buying price / unit:</Label>
+                <TextBox Name="txtBuyingPrice" Width="200" HorizontalAlignment="Left" />
+            </WrapPanel>
+
+            <WrapPanel Margin="0,90,0,0" Grid.Column="1">
+                <Label Width="150" FontSize="15">Producer:</Label>
+                <TextBox Name="txtProducer" Width="200" HorizontalAlignment="Left" />
+            </WrapPanel>
+
+            <WrapPanel Margin="0,50,0,0" Grid.Column="1">
+                <Label Width="150" FontSize="15">Product:</Label>
+                <TextBox Name="txtProduct" Width="200" HorizontalAlignment="Left" />
+            </WrapPanel>
+        </Grid>
+
+        <WrapPanel>
+            <Label Name="lblMessage" Content="{Binding ErrorMessage}" Height="30" FontSize="15" Foreground="Red"/>
+        </WrapPanel>
+
+        <WrapPanel>
+            <Button Content="Add Stock" Margin="15" Width="100" Height="30" Command="{Binding AddCommand}">
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource StockConvert}" >
+                        <Binding ElementName="txtAmount" Path="Text"/>
+                        <Binding ElementName="txtSupplyDate" Path="Text"/>
+                        <Binding ElementName="txtExpDate" Path="Text"/>
+                        <Binding ElementName="txtBuyingPrice" Path="Text"/>
+                        <Binding ElementName="txtProducer" Path="Text"/>
+                        <Binding ElementName="txtProduct" Path="Text"/>
+                    </MultiBinding>
+                </Button.CommandParameter>
+            </Button>
+            <Button Content="Modify" Margin="15" Width="100" Height="30" Command="{Binding UpdateCommand}" 
+CommandParameter="{Binding ElementName=stocksGrid, Path=SelectedItem}" />
+            <Button Content="Delete" Margin="15" Width="100" Height="30" Command="{Binding DeleteCommand}" 
+CommandParameter="{Binding ElementName=stocksGrid, Path=SelectedItem}" />
+            <Button Content="Exit" Width="100" Height="30" Margin="270 0 0 0" Click="Exit_Click"/>
+        </WrapPanel>
+    </StackPanel>
+</Window>
